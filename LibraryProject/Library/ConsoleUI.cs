@@ -4,10 +4,10 @@ using Spectre.Console;
 
 public class ConsoleUI {
     
-    BookService bookService;
+    Library library;
 
     public ConsoleUI() {
-        bookService = new BookService();
+        library = Library.getInstance();
     }
 
     public void MainMenu() {
@@ -22,7 +22,6 @@ public class ConsoleUI {
             )
         );
 
-        // Echo the fruit back to the terminal
         AnsiConsole.WriteLine($"{command}");
 
         if (command == "Add Book") {
@@ -37,14 +36,15 @@ public class ConsoleUI {
 
     public void AddBookMenu() {
         Console.WriteLine("=== Add Book ===");
-        Book book = new Book();
 
-        book.title = AskForInput("Enter title: ");
-        book.genre = AskForInput("Enter genre: ");
-        book.isbn = AskForInput("Enter isbn: ");
-        book.description = AskForInput("Enter description: ");
+        string title = AskForInput("Enter title: ");
+        string genre = AskForInput("Enter genre: ");
+        string isbn = AskForInput("Enter isbn: ");
+        string description = AskForInput("Enter description: ");
 
-        bookService.AddBook(book);
+        Book book = new Book(title, genre, isbn, description, null, null);
+
+        library.AddBook(book);
 
         var confirmation = AnsiConsole.Prompt(
             new TextPrompt<bool>("Add new Book?")
@@ -61,7 +61,30 @@ public class ConsoleUI {
     }
 
     public void ShowBookMenu() {
-        // TODO Add show Book
+        Console.WriteLine("=== Show Book ===");
+
+        string searchTitle = AskForInput("Enter books title: ");
+
+        Book book = library.GetBook(searchTitle);
+
+        if (book != null) {
+            book.printBookDetails();
+        } else {
+            Console.WriteLine("No Book found!");
+        }
+
+        var confirmation = AnsiConsole.Prompt(
+            new TextPrompt<bool>("Search another Book?")
+                .AddChoice(true)
+                .AddChoice(false)
+                .DefaultValue(true)
+                .WithConverter(choice => choice ? "y" : "n"));
+            
+        if (confirmation) {
+            ShowBookMenu();
+        } else {
+            MainMenu();
+        }
     }
 
     public static string AskForInput(string message) {
