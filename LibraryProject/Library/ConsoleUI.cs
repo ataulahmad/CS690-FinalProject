@@ -37,12 +37,14 @@ public class ConsoleUI {
 
     public void AddBookMenu() {
         Console.WriteLine("=== Add Book ===");
-        string title = AskForInput("Enter title: ");
-        string genre = AskForInput("Enter genre: ");
-        string isbn = AskForInput("Enter isbn: ");
-        string description = AskForInput("Enter description: ");
+        Book book = new Book();
 
-        bookService.AddBook(title, genre, isbn, description);
+        book.title = AskForInput("Enter title: ");
+        book.genre = AskForInput("Enter genre: ");
+        book.isbn = AskForInput("Enter isbn: ");
+        book.description = AskForInput("Enter description: ");
+
+        bookService.AddBook(book);
 
         var confirmation = AnsiConsole.Prompt(
             new TextPrompt<bool>("Add new Book?")
