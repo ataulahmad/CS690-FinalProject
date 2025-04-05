@@ -1,31 +1,69 @@
 namespace Library;
 
+using Spectre.Console;
+
 public class ConsoleUI {
     
-    FileSaver fileSaver;
+    BookService bookService;
 
     public ConsoleUI() {
-        fileSaver = new FileSaver("book-data.txt");
+        bookService = new BookService();
     }
 
-    public void show() {
-        string command;
+    public void MainMenu() {
+        var command = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title("What's your [green]choice[/]?")
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
+                .AddChoices(new[] {
+                    "Add Book", "Show Book", "Quit",
+                }
+            )
+        );
 
-        do {
-            Console.WriteLine("Add Book");
-            string title = AskForInput("Enter title: ");
-            string genre = AskForInput("Enter genre: ");
-            string isbn = AskForInput("Enter isbn: ");
-            string description = AskForInput("Enter description: ");
+        // Echo the fruit back to the terminal
+        AnsiConsole.WriteLine($"{command}");
 
-            fileSaver.AppendLine(title + ":" + genre + ":" + isbn + ":" + description);
+        if (command == "Add Book") {
+            AddBookMenu();
+        } else if (command == "Show Book") {
+            ShowBookMenu();
+        } else if (command == "Quit") {
+            Console.WriteLine("Quited");
+        }
+        
+    }
 
-            command = AskForInput("Add new Book? (Y / N): ");
-        } while (command != "N");
+    public void AddBookMenu() {
+        Console.WriteLine("=== Add Book ===");
+        string title = AskForInput("Enter title: ");
+        string genre = AskForInput("Enter genre: ");
+        string isbn = AskForInput("Enter isbn: ");
+        string description = AskForInput("Enter description: ");
+
+        bookService.AddBook(title, genre, isbn, description);
+
+        var confirmation = AnsiConsole.Prompt(
+            new TextPrompt<bool>("Add new Book?")
+                .AddChoice(true)
+                .AddChoice(false)
+                .DefaultValue(true)
+                .WithConverter(choice => choice ? "y" : "n"));
+            
+        if (confirmation) {
+            AddBookMenu();
+        } else {
+            MainMenu();
+        }
+    }
+
+    public void ShowBookMenu() {
+        // TODO Add show Book
     }
 
     public static string AskForInput(string message) {
-        Console.WriteLine(message);
+        Console.Write(message);
         return Console.ReadLine();
     }
 
