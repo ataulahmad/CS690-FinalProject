@@ -4,10 +4,10 @@ using Spectre.Console;
 
 public class ConsoleUI {
     
-    Library library;
+    LibraryInventory library;
 
     public ConsoleUI() {
-        library = Library.getInstance();
+        library = LibraryInventory.getInstance();
     }
 
     public void MainMenu() {

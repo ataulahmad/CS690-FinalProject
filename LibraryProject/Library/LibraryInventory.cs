@@ -1,13 +1,13 @@
 namespace Library;
 
-public class Library {
+public class LibraryInventory {
 
-    private static Library instance;
+    private static LibraryInventory? instance;
 
     FileSaver booksFileSaver;
     List<Book> books;
 
-    private Library() {
+    private LibraryInventory() {
         books = new List<Book>();
         booksFileSaver = new FileSaver("book-data.txt");
         
@@ -16,9 +16,9 @@ public class Library {
         }
     }
 
-    public static Library getInstance() {
+    public static LibraryInventory getInstance() {
         if (instance == null) {
-            instance = new Library();
+            instance = new LibraryInventory();
         }
         return instance;
     }
@@ -28,7 +28,7 @@ public class Library {
         books.Add(book);
     }
 
-    public Book GetBook(string searchTitle) {
+    public Book? GetBook(string searchTitle) {
         foreach (Book book in this.books) {
             if (book.title == searchTitle) {
                 return book;
