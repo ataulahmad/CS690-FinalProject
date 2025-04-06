@@ -3,26 +3,24 @@ namespace Library.Tests;
 using Library;
 public class BookTests {
 
-    BookService bookService;
+    LibraryInventory library;
 
     public BookTests() {
-        bookService = new BookService();
+        library = LibraryInventory.getInstance();
     }
 
     [Fact]
     public void AddBookTest() {
         // given
-        Book book = new Book();
-        book.title = "title";
-        book.genre = "genre";
-        book.isbn = "isbn";
-        book.description = "description";
+        File.Delete("book-data.txt");
+        Book book = new Book("title", "genre", "isbn", "description", null, null);
 
         // when
-        bookService.AddBook(book);
+        library.AddBook(book);
 
         // then
         var contentFromFile = File.ReadAllText("book-data.txt");
+        Console.WriteLine(contentFromFile);
         Assert.Equal("title:genre:isbn:description::"+Environment.NewLine, contentFromFile);
     }
 }
