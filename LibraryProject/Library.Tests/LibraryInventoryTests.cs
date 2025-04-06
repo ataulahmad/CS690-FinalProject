@@ -1,11 +1,12 @@
 namespace Library.Tests;
 
 using Library;
-public class BookTests {
+
+public class LibraryInventoryTests {
 
     LibraryInventory library;
 
-    public BookTests() {
+    public LibraryInventoryTests() {
         library = LibraryInventory.getInstance();
     }
 
@@ -20,7 +21,22 @@ public class BookTests {
 
         // then
         var contentFromFile = File.ReadAllText("book-data.txt");
-        Console.WriteLine(contentFromFile);
         Assert.Equal("title:genre:isbn:description::"+Environment.NewLine, contentFromFile);
     }
+
+
+    [Fact]
+    public void GetBookTest() {
+        // given
+        File.Delete("book-data.txt");
+        Book expectedBook = new Book("title1", "genre", "isbn", "description", null, null);
+        library.AddBook(expectedBook);
+
+        // when
+        Book? actualBook = library.GetBook("title1");
+
+        // then
+        Assert.Equal(expectedBook, actualBook);
+    }
+
 }
