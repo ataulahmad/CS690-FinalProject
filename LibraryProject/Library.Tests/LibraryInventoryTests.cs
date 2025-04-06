@@ -86,6 +86,29 @@ public class LibraryInventoryTests {
 
         // then
         Assert.True(book.customer == customer);
+        Assert.True(book.dueDate == DateTime.UtcNow.Date.AddDays(30).ToString("d"));
+    }
+
+
+    [Fact]
+    public void CheckInTest() {
+        // given
+        File.Delete("book-data.txt");
+        File.Delete("customer-data.txt");
+
+        Customer customer = new Customer("name", "address", "email");
+        library.AddCustomer(customer);
+        Book book = new Book("title1", "genre", "isbn", "description", null, null);
+        library.AddBook(book);
+
+        library.CheckoutBookForCustomer(book, customer);
+
+        // when
+        library.CheckinBook(book);
+
+        // then
+        Assert.True(book.customer == null);
+        Assert.True(book.dueDate == null);
     }
 
 }

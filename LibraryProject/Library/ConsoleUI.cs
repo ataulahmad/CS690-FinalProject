@@ -35,7 +35,7 @@ public class ConsoleUI {
         
     }
 
-    public void AddBookMenu() {
+    private void AddBookMenu() {
         Console.WriteLine("=== Add Book ===");
 
         string title = AskForInput("Enter title: ");
@@ -47,12 +47,7 @@ public class ConsoleUI {
 
         library.AddBook(book);
 
-        var confirmation = AnsiConsole.Prompt(
-            new TextPrompt<bool>("Add new Book?")
-                .AddChoice(true)
-                .AddChoice(false)
-                .DefaultValue(true)
-                .WithConverter(choice => choice ? "y" : "n"));
+        var confirmation = booleanPrompt("Add new Book?");
             
         if (confirmation) {
             AddBookMenu();
@@ -61,7 +56,7 @@ public class ConsoleUI {
         }
     }
 
-    public void ShowBookMenu() {
+    private void ShowBookMenu() {
         Console.WriteLine("=== Show Book ===");
 
         string? searchTitle = AskForInput("Enter books title: ");
@@ -73,19 +68,13 @@ public class ConsoleUI {
             if (book.customer == null) {
                 CheckOutMenu(book);
             } else {
-                // CheckIn();
-                Console.WriteLine("Book is already checked out!");    
+                CheckInMenu(book);
             }
         } else {
             Console.WriteLine("No Book found!");
         }
 
-        var confirmation = AnsiConsole.Prompt(
-            new TextPrompt<bool>("Search another Book?")
-                .AddChoice(true)
-                .AddChoice(false)
-                .DefaultValue(true)
-                .WithConverter(choice => choice ? "y" : "n"));
+        var confirmation = booleanPrompt("Search another Book?");
             
         if (confirmation) {
             ShowBookMenu();
@@ -94,7 +83,7 @@ public class ConsoleUI {
         }
     }
 
-    public string AddCustomerMenu() {
+    private string AddCustomerMenu() {
         Console.WriteLine("=== Add Customer ===");
 
         string name = AskForInput("Enter Name: ");
@@ -103,12 +92,7 @@ public class ConsoleUI {
         
         Customer customer = new Customer(name, address, email);
 
-        var confirmation = AnsiConsole.Prompt(
-            new TextPrompt<bool>("Save Customer?")
-                .AddChoice(true)
-                .AddChoice(false)
-                .DefaultValue(true)
-                .WithConverter(choice => choice ? "y" : "n"));
+        var confirmation = booleanPrompt("Save Customer?");
             
         if (confirmation) {
             library.AddCustomer(customer);
@@ -119,17 +103,38 @@ public class ConsoleUI {
     }
 
     private void CheckOutMenu(Book book) {
-        string name = AskForInput("Enter Customer Name: ");
-        Customer? customer = library.GetCustomer(name);
-        if (customer == null) {
-            name = AddCustomerMenu();
-            customer = library.GetCustomer(name);
+        var checkout = booleanPrompt("Book is available. Checkout?");
+
+        if (checkout) {
+            string name = AskForInput("Enter Customer Name: ");
+            Customer? customer = library.GetCustomer(name);
+            if (customer == null) {
+                name = AddCustomerMenu();
+                customer = library.GetCustomer(name);
+            }
+            
+            library.CheckoutBookForCustomer(book, customer);
         }
-        
-        library.CheckoutBookForCustomer(book, customer);
     }
 
-    public static string AskForInput(string message) {
+    private void CheckInMenu(Book book) {
+        var checkin = booleanPrompt("Do you want to return Book?");
+
+        if (checkin) {
+            library.CheckinBook(book);
+        }
+    }
+
+    private Boolean booleanPrompt(string message) {
+        return AnsiConsole.Prompt(
+            new TextPrompt<bool>(message)
+                .AddChoice(true)
+                .AddChoice(false)
+                .DefaultValue(true)
+                .WithConverter(choice => choice ? "y" : "n"));
+    }
+
+    private static string AskForInput(string message) {
         Console.Write(message);
         return Console.ReadLine();
     }
