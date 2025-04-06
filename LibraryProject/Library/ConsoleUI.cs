@@ -17,7 +17,7 @@ public class ConsoleUI {
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(new[] {
-                    "Add Book", "Show Book", "Quit",
+                    "Add Book", "Show Book", "Add Customer", "Quit",
                 }
             )
         );
@@ -28,6 +28,8 @@ public class ConsoleUI {
             AddBookMenu();
         } else if (command == "Show Book") {
             ShowBookMenu();
+        } else if (command == "Add Customer") {
+            AddCustomerMenu();
         } else if (command == "Quit") {
             Console.WriteLine("Quited");
         }
@@ -87,7 +89,30 @@ public class ConsoleUI {
         }
     }
 
-    public static string? AskForInput(string message) {
+    public void AddCustomerMenu() {
+        Console.WriteLine("=== Add Customer ===");
+
+        string name = AskForInput("Enter Name: ");
+        string address = AskForInput("Enter Address: ");
+        string email = AskForInput("Enter Email: ");
+        
+        Customer customer = new Customer(name, address, email);
+
+        var confirmation = AnsiConsole.Prompt(
+            new TextPrompt<bool>("Save Customer?")
+                .AddChoice(true)
+                .AddChoice(false)
+                .DefaultValue(true)
+                .WithConverter(choice => choice ? "y" : "n"));
+            
+        if (confirmation) {
+            library.AddCustomer(customer);
+        }
+
+        MainMenu();
+    }
+
+    public static string AskForInput(string message) {
         Console.Write(message);
         return Console.ReadLine();
     }
