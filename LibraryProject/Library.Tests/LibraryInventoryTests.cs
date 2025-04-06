@@ -86,6 +86,7 @@ public class LibraryInventoryTests {
 
         // then
         Assert.True(book.customer == customer);
+        Assert.True(book.dueDate == DateTime.UtcNow.Date.AddDays(30).ToString("d"));
     }
 
 }

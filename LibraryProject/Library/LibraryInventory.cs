@@ -74,6 +74,7 @@ public class LibraryInventory {
     }
 
     public void CheckoutBookForCustomer(Book book, Customer customer) {
+        book.dueDate = DateTime.UtcNow.Date.AddDays(30).ToString("d");
         book.customer = customer;
         booksFileSaver.EmptyFile();
         
