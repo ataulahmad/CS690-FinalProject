@@ -59,14 +59,33 @@ public class LibraryInventoryTests {
     public void GetCustomerTest() {
         // given
         File.Delete("customer-data.txt");
-        Customer expectedCustomer = new Customer("name", "address", "email");
+        Customer expectedCustomer = new Customer("name1", "address", "email");
         library.AddCustomer(expectedCustomer);
 
         // when
-        Customer? actualCustomer = library.GetCustomer("name");
+        Customer? actualCustomer = library.GetCustomer("name1");
 
         // then
         Assert.Equal(expectedCustomer, actualCustomer);
+    }
+
+
+    [Fact]
+    public void CheckOutBookForCustomerTest() {
+        // given
+        File.Delete("book-data.txt");
+        File.Delete("customer-data.txt");
+
+        Customer customer = new Customer("name", "address", "email");
+        library.AddCustomer(customer);
+        Book book = new Book("title1", "genre", "isbn", "description", null, null);
+        library.AddBook(book);
+
+        // when
+        library.CheckoutBookForCustomer(book, customer);
+
+        // then
+        Assert.True(book.customer == customer);
     }
 
 }

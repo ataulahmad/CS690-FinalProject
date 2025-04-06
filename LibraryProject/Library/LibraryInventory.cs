@@ -73,4 +73,13 @@ public class LibraryInventory {
         return null;
     }
 
+    public void CheckoutBookForCustomer(Book book, Customer customer) {
+        book.customer = customer;
+        booksFileSaver.EmptyFile();
+        
+        foreach (Book b in books) {
+            booksFileSaver.AppendLine(b.CreateLineFromBook());
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 namespace Library;
 
+using System.ComponentModel.Design;
 using Spectre.Console;
 
 public class ConsoleUI {
@@ -17,7 +18,7 @@ public class ConsoleUI {
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(new[] {
-                    "Add Book", "Show Book", "Add Customer", "Quit",
+                    "Add Book", "Show Book", "Quit",
                 }
             )
         );
@@ -28,8 +29,6 @@ public class ConsoleUI {
             AddBookMenu();
         } else if (command == "Show Book") {
             ShowBookMenu();
-        } else if (command == "Add Customer") {
-            AddCustomerMenu();
         } else if (command == "Quit") {
             Console.WriteLine("Quited");
         }
@@ -71,6 +70,12 @@ public class ConsoleUI {
 
         if (book != null) {
             book.printBookDetails();
+            if (book.customer == null) {
+                CheckOutMenu(book);
+            } else {
+                // CheckIn();
+                Console.WriteLine("Book is already checked out!");    
+            }
         } else {
             Console.WriteLine("No Book found!");
         }
@@ -89,7 +94,7 @@ public class ConsoleUI {
         }
     }
 
-    public void AddCustomerMenu() {
+    public string AddCustomerMenu() {
         Console.WriteLine("=== Add Customer ===");
 
         string name = AskForInput("Enter Name: ");
@@ -107,9 +112,21 @@ public class ConsoleUI {
             
         if (confirmation) {
             library.AddCustomer(customer);
+            return name;
         }
 
-        MainMenu();
+        return null;
+    }
+
+    private void CheckOutMenu(Book book) {
+        string name = AskForInput("Enter Customer Name: ");
+        Customer? customer = library.GetCustomer(name);
+        if (customer == null) {
+            name = AddCustomerMenu();
+            customer = library.GetCustomer(name);
+        }
+        
+        library.CheckoutBookForCustomer(book, customer);
     }
 
     public static string AskForInput(string message) {

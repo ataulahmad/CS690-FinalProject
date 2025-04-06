@@ -17,4 +17,8 @@ public class FileSaver {
     public string[] GetAllLines() {
         return File.ReadAllLines(this.fileName);
     }
+
+    public void EmptyFile() {
+        File.Create(this.fileName).Close();
+    }
 }
