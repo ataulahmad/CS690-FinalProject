@@ -63,9 +63,9 @@ public class ConsoleUI {
     public void ShowBookMenu() {
         Console.WriteLine("=== Show Book ===");
 
-        string searchTitle = AskForInput("Enter books title: ");
+        string? searchTitle = AskForInput("Enter books title: ");
 
-        Book book = library.GetBook(searchTitle);
+        Book? book = library.GetBook(searchTitle);
 
         if (book != null) {
             book.printBookDetails();
@@ -87,7 +87,7 @@ public class ConsoleUI {
         }
     }
 
-    public static string AskForInput(string message) {
+    public static string? AskForInput(string message) {
         Console.Write(message);
         return Console.ReadLine();
     }

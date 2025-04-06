@@ -28,7 +28,7 @@ public class LibraryInventory {
         books.Add(book);
     }
 
-    public Book? GetBook(string searchTitle) {
+    public Book? GetBook(string? searchTitle) {
         foreach (Book book in this.books) {
             if (book.title == searchTitle) {
                 return book;
