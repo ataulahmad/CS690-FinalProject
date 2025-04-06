@@ -7,10 +7,14 @@ public class FileSaver {
 
     public FileSaver(string fileName) {
         this.fileName = fileName;
-        File.Create(fileName).Close();
+        File.AppendText(fileName).Close();
     }
 
     public void AppendLine(string line) {
         File.AppendAllText(this.fileName, line + Environment.NewLine);
+    }
+
+    public string[] GetAllLines() {
+        return File.ReadAllLines(this.fileName);
     }
 }
