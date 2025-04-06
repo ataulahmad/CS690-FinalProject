@@ -24,7 +24,7 @@ public class Book {
         return title;
     }
 
-    public string DbString() {
+    public string CreateLineFromBook() {
         return title + ":" + genre + ":" + isbn + ":" + description + ":" + customer + ":" + dueDate;
     }
 
@@ -56,10 +56,5 @@ public class Book {
         AnsiConsole.Write(table);
     }
 
-    public static Book CreateBook(String line) {
-        string[] attributes = line.Split(':');
-        // TODO: Add customer search
-        Customer? customer = null;
-        return new Book(attributes[0], attributes[1], attributes[2], attributes[3], customer, attributes[5]);
-    }
+    
 }
