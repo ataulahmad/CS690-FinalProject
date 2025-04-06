@@ -12,15 +12,15 @@ public class ConsoleUI {
     }
 
     public void LoginMenu() {
-        var username = AnsiConsole.Prompt(new TextPrompt<string>("Enter username:"));
-        var password = AnsiConsole.Prompt(new TextPrompt<string>("Enter password:").Secret());
+        var username = AnsiConsole.Prompt(new TextPrompt<string>("[green]Enter username:[/]"));
+        var password = AnsiConsole.Prompt(new TextPrompt<string>("[green]Enter password:[/]").Secret());
 
         Boolean authenticated = library.Login(username, password);
 
         if (authenticated) {
             MainMenu();
         } else {
-            Console.WriteLine("The combination of your user/password is incorrect!");
+            AnsiConsole.MarkupLine("[red]The combination of your user/password is incorrect![/]");
         }
     }
 
@@ -49,7 +49,7 @@ public class ConsoleUI {
     }
 
     private void AddBookMenu() {
-        Console.WriteLine("=== Add Book ===");
+        DisplayHeader("Add Book");
 
         string title = AskForInput("Enter title: ");
         string genre = AskForInput("Enter genre: ");
@@ -70,7 +70,7 @@ public class ConsoleUI {
     }
 
     private void ShowBookMenu() {
-        Console.WriteLine("=== Show Book ===");
+        DisplayHeader("Show Book");
 
         string? searchTitle = AskForInput("Enter books title: ");
 
@@ -84,7 +84,7 @@ public class ConsoleUI {
                 CheckInMenu(book);
             }
         } else {
-            Console.WriteLine("No Book found!");
+            AnsiConsole.MarkupLine("[red]No Book found![/]");
         }
 
         var confirmation = booleanPrompt("Search another Book?");
@@ -97,7 +97,7 @@ public class ConsoleUI {
     }
 
     private string AddCustomerMenu() {
-        Console.WriteLine("=== Add Customer ===");
+        DisplayHeader("Add Customer");
 
         string name = AskForInput("Enter Name: ");
         string address = AskForInput("Enter Address: ");
@@ -140,16 +140,23 @@ public class ConsoleUI {
 
     private Boolean booleanPrompt(string message) {
         return AnsiConsole.Prompt(
-            new TextPrompt<bool>(message)
+            new TextPrompt<bool>("[yellow]"+message+"[/]")
                 .AddChoice(true)
                 .AddChoice(false)
                 .DefaultValue(true)
                 .WithConverter(choice => choice ? "y" : "n"));
     }
 
-    private static string AskForInput(string message) {
-        Console.Write(message);
-        return Console.ReadLine();
+    private string AskForInput(string message) {
+        return AnsiConsole.Prompt(new TextPrompt<string>("[green]"+message+"[/]"));
+    }
+
+    private void DisplayHeader(string header) {
+        string border = string.Concat(Enumerable.Repeat("=", header.Length + 8));
+
+        AnsiConsole.MarkupLine("[bold]"+border+"[/]");
+        AnsiConsole.MarkupLine("[bold yellow on blue]    "+header+"    [/]");
+        AnsiConsole.MarkupLine("[bold]"+border+"[/]");
     }
 
 }
