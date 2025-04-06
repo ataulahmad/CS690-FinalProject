@@ -4,6 +4,9 @@ public class LibraryInventory {
 
     private static LibraryInventory? instance;
 
+    FileSaver librarianFileSaver;
+    List<Librarian> librarians;
+
     FileSaver booksFileSaver;
     List<Book> books;
 
@@ -11,8 +14,20 @@ public class LibraryInventory {
     List<Customer> customers;
 
     private LibraryInventory() {
+        initLibrarians();
         initCustomers();
         intitBooks();
+    }
+
+    private void initLibrarians() {
+        librarians = new List<Librarian>();
+        librarianFileSaver = new FileSaver("user-data.txt");
+        
+        foreach (string line in librarianFileSaver.GetAllLines()) {
+            string[] attributes = line.Split(':');
+            Librarian librarian = new Librarian(attributes[0], attributes[1]);
+            librarians.Add(librarian);
+        }
     }
 
     private void initCustomers() {
@@ -43,6 +58,15 @@ public class LibraryInventory {
             instance = new LibraryInventory();
         }
         return instance;
+    }
+
+    public Boolean Login(string username, string password) {
+        foreach (Librarian librarian in librarians) {
+            if (librarian.username == username & librarian.password == password) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void AddBook(Book book) {

@@ -11,7 +11,20 @@ public class ConsoleUI {
         library = LibraryInventory.getInstance();
     }
 
-    public void MainMenu() {
+    public void LoginMenu() {
+        var username = AnsiConsole.Prompt(new TextPrompt<string>("Enter username:"));
+        var password = AnsiConsole.Prompt(new TextPrompt<string>("Enter password:").Secret());
+
+        Boolean authenticated = library.Login(username, password);
+
+        if (authenticated) {
+            MainMenu();
+        } else {
+            Console.WriteLine("The combination of your user/password is incorrect!");
+        }
+    }
+
+    private void MainMenu() {
         var command = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
                 .Title("What's your [green]choice[/]?")
