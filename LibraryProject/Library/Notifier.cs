@@ -4,13 +4,16 @@ public class Notifier {
 
     LibraryInventory library = LibraryInventory.getInstance();
 
-    public void CheckAndNotify() {
+    public int CheckAndNotify() {
+        int sentNotifications = 0;
         List<Book> books = library.GetAllBooks();
         foreach(Book book in books) {
             if (!string.IsNullOrEmpty(book.dueDate) && DateTime.Parse(book.dueDate) < DateTime.UtcNow.Date) {
                 notifyCustomer(book);
+                sentNotifications++;
             }
         }
+        return sentNotifications;
     }
 
     private void notifyCustomer(Book book) {

@@ -7,7 +7,8 @@ class Program {
             string command = args[0].ToLower();
             if (command == "notify") {
                 Notifier notifier = new Notifier();
-                notifier.CheckAndNotify();
+                int sentNotifications = notifier.CheckAndNotify();
+                Console.WriteLine($"Sent {sentNotifications} notifications!");
             }
         } else {
             ConsoleUI ui = new ConsoleUI();
