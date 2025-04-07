@@ -25,7 +25,7 @@ public class Book {
     }
 
     public string CreateLineFromBook() {
-        return $"{title}:{genre}:{isbn}:{description}:{customer}:{dueDate}";
+        return $"{this.title}:{this.genre}:{this.isbn}:{this.description}:{this.customer}:{this.dueDate}";
     }
 
     public void printBookDetails() {
