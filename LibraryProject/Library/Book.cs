@@ -25,7 +25,7 @@ public class Book {
     }
 
     public string CreateLineFromBook() {
-        return title + ":" + genre + ":" + isbn + ":" + description + ":" + customer + ":" + dueDate;
+        return $"{title}:{genre}:{isbn}:{description}:{customer}:{dueDate}";
     }
 
     public void printBookDetails() {
@@ -54,6 +54,22 @@ public class Book {
 
         // Render the table to the console
         AnsiConsole.Write(table);
+    }
+
+
+    public override bool Equals(object? obj) {
+        if (obj is not Book other) return false;
+
+        return title == other.title &&
+               genre == other.genre &&
+               isbn == other.isbn &&
+               description == other.description &&
+               customer == other.customer &&
+               dueDate == other.dueDate;
+    }
+
+    public override int GetHashCode() {
+        return HashCode.Combine(title, genre, isbn, description, customer, dueDate);
     }
 
     
