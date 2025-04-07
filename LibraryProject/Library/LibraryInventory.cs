@@ -83,6 +83,10 @@ public class LibraryInventory {
         return null;
     }
 
+    public List<Book> GetAllBooks() {
+        return this.books;
+    }
+
     public void AddCustomer(Customer customer) {
         customerFileSaver.AppendLine(customer.CreateLineFromCustomer());
         customers.Add(customer);

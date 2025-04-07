@@ -29,11 +29,11 @@ public class LibraryInventoryTests {
     public void GetBookTest() {
         // given
         File.Delete("book-data.txt");
-        Book expectedBook = new Book("title1", "genre", "isbn", "description", null, null);
+        Book expectedBook = new Book("title2", "genre", "isbn", "description", null, null);
         library.AddBook(expectedBook);
 
         // when
-        Book? actualBook = library.GetBook("title1");
+        Book? actualBook = library.GetBook("title2");
 
         // then
         Assert.Equal(expectedBook, actualBook);
